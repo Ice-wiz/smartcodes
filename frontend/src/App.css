@@ -1,0 +1,54 @@
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #121212;
+  color: white;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #222;
+  color: white;
+}
+
+button {
+  padding: 10px;
+  background-color: #09f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #555;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
+
+.results {
+  margin-top: 2rem;
+}
+
+.result-card {
+  background: #1e1e1e;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #09f;
+  border-radius: 4px;
+}

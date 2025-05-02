@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+beautifulsoup4
+requests
+transformers
+torch
+weaviate-client
+sentence-transformers
+
