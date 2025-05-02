@@ -51,7 +51,7 @@ def search_chunks(input: SearchInput):
     query_vector = embed_query(input.query)
 
     # Step 5: Semantic search in Weaviate
-    results = weaviate_client.search_by_vector(query_vector, limit=10)
+    results = weaviate_client.search_by_vector(query_vector , limit=10)
 
     return {
         "query": input.query,
