@@ -26,17 +26,22 @@ class WeaviateClient:
                         name="url",
                         data_type=wvc.config.DataType.TEXT,
                     ),
+                    wvc.config.Property(
+                        name="html",
+                        data_type=wvc.config.DataType.TEXT,
+                    )
                 ],
             )
         return self.client.collections.get("HTMLChunk")
 
-    def insert_chunk_with_vector(self, chunk: str, url: str, vector: list[float]):
+    def insert_chunk_with_vector(self, chunk: str, url: str, vector: list[float], raw_html: str):
         self.collection.data.insert(
             properties={
                 "chunk": chunk,
                 "url": url,
+                "html": raw_html
             },
-            vector=vector  # custom embedding
+            vector=vector
         )
 
     def search_by_vector(self, query_vector: list[float], limit: int = 10):
@@ -51,7 +56,6 @@ class WeaviateClient:
         return [
             {
                 "chunk": obj.properties["chunk"],
-                "url": obj.properties["url"],
                 "score": obj.metadata.distance,
             }
             for obj in results.objects
@@ -66,6 +70,15 @@ class WeaviateClient:
             return True, collections
         except Exception as e:
             return False, str(e)
+
+    def reset_collection(self):
+        try:
+            self.client.collections.delete("HTMLChunk")
+            print("Collection 'HTMLChunk' deleted.")
+        except Exception as e:
+            print(f"Could not delete collection: {e}")
+            self.collection = self._init_collection()
+        print("Collection 'HTMLChunk' re-initialized.")
 
     def close(self):
         self.client.close()
