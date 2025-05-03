@@ -52,3 +52,15 @@ button:disabled {
   border-left: 4px solid #09f;
   border-radius: 4px;
 }
+
+.raw-html {
+  background: #efefef;
+  color: black;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 8px;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.85em;
+  white-space: pre-wrap;
+}

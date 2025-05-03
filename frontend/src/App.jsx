@@ -8,6 +8,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [expanded, setExpanded] = useState(null); 
 
   const backendUrl = "http://localhost:8000/search";
 
@@ -20,6 +21,7 @@ function App() {
     setLoading(true);
     setError('');
     setResults([]);
+    setExpanded(null);
 
     try {
       const res = await axios.post(backendUrl, { url, query });
@@ -61,8 +63,20 @@ function App() {
           {results.map((match, idx) => (
             <div key={idx} className="result-card">
               <p><strong>Chunk:</strong> {match.chunk}</p>
-              <p><strong>URL:</strong> {match.url}</p>
               <p><strong>Score:</strong> {match.score.toFixed(4)}</p>
+
+              <button
+                onClick={() => setExpanded(expanded === idx ? null : idx)}
+                className="toggle-btn"
+              >
+                {expanded === idx ? "Hide Raw HTML" : "Show Raw HTML"}
+              </button>
+
+              {expanded === idx && (
+                <pre className="raw-html">
+                  <code>{match.html}</code>
+                </pre>
+              )}
             </div>
           ))}
         </div>
