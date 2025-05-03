@@ -50,16 +50,24 @@ In the project root directory, a `docker-compose.yml` file is included to run We
 docker-compose up -d
 ```
 
-2. Run the Backend (FastAPI)
+2. **Run the Backend (FastAPI)**
+
 Navigate into the backend directory and start the FastAPI server:
 
+```bash
 cd backend
 uvicorn main:app --reload
 
-3. Run the Frontend (React)
+```
+
+3. **Run the Frontend (React)**
+
 Navigate into the frontend directory, install dependencies, and start the development server:
 
+```basb
 cd frontend
 npm install
 npm run dev
+
+```
 
