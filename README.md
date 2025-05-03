@@ -29,7 +29,6 @@ Make sure you have the following installed:
 - Python 3.8+
 - FastAPI
 - Weaviate (local or Docker)
-- Hugging Face `transformers`
 - `sentence-transformers`
 - `nltk`
 - `requests`
