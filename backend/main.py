@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # frontend origin
+    allow_origins=["http://localhost:5173"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,13 +37,11 @@ def search_chunks(input: SearchInput):
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(response.text, "html.parser")
 
-    # Remove unwanted tags (reuse same tags from your clean_html)
     for tag in soup(["script", "style", "noscript", "header", "footer", "nav", "svg", "form", "input", "button", "aside"]):
         tag.decompose()
     for tag in soup.select('[style*="display:none"], [style*="visibility:hidden"], [hidden]'):
         tag.decompose()
 
-    # Process paragraph-level blocks
     paragraph_tags = soup.find_all(["p", "div", "section", "article"])
 
     all_chunks = []
@@ -55,7 +53,7 @@ def search_chunks(input: SearchInput):
         clean_text = clean_html(raw_html)
 
         if not clean_text or len(clean_text.split()) < 5:
-            continue  # Skip empty or tiny blocks
+            continue 
 
         sub_chunks = chunk_by_sentence(clean_text)
 
@@ -69,7 +67,6 @@ def search_chunks(input: SearchInput):
         # Map each chunk to the same HTML block
         html_map.extend([raw_html] * len(sub_chunks))
 
-    # Insert into Weaviate
     for chunk, vector, html in zip(all_chunks, all_vectors, html_map):
         weaviate_client.insert_chunk_with_vector(
             chunk, input.url, vector, html)
@@ -79,23 +76,5 @@ def search_chunks(input: SearchInput):
 
     return {
         "query": input.query,
-        "matches": results  # Includes chunk + html + score
+        "matches": results  
     }
-
-
-# Optional endpoint if you want to inspect chunks
-# @app.post("/extract")
-# def extract_chunks(input: SearchInput):
-#     try:
-#         response = requests.get(input.url, timeout=10)
-#         response.raise_for_status()
-#     except requests.RequestException as e:
-#         raise HTTPException(status_code=400, detail=str(e))
-
-#     cleaned_text = clean_html(response.text)
-#     chunks = chunk_text(cleaned_text)
-
-#     return {
-#         "num_chunks": len(chunks),
-#         "chunks": chunks[:10]
-#     }
