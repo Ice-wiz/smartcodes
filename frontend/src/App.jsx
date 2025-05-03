@@ -8,7 +8,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [expanded, setExpanded] = useState(null); 
+  const [expanded, setExpanded] = useState(null);
 
   const backendUrl = "http://localhost:8000/search";
 
@@ -25,7 +25,10 @@ function App() {
 
     try {
       const res = await axios.post(backendUrl, { url, query });
-      setResults(res.data.matches);
+
+      // Sort results by descending score
+      const sortedMatches = res.data.matches.sort((a, b) => b.score - a.score);
+      setResults(sortedMatches);
     } catch (err) {
       setError(err.response?.data?.detail || "An error occurred.");
     } finally {
@@ -63,7 +66,7 @@ function App() {
           {results.map((match, idx) => (
             <div key={idx} className="result-card">
               <p><strong>Chunk:</strong> {match.chunk}</p>
-              <p><strong>Score:</strong> {match.score.toFixed(4)}</p>
+              <p><strong>Match:</strong> {(match.score * 100).toFixed(0)}%</p>
 
               <button
                 onClick={() => setExpanded(expanded === idx ? null : idx)}
