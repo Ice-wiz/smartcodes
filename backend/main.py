@@ -7,7 +7,6 @@ from utils.html_parser import clean_html
 from utils.tokenizer import chunk_by_sentence, embed_chunks, embed_query
 from utils.weaviate_client import weaviate_client
 
-
 app = FastAPI()
 
 app.add_middleware(
@@ -32,12 +31,14 @@ def search_chunks(input: SearchInput):
     except requests.RequestException as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    weaviate_client.reset_collection() # RESETTING HERE SO THAT PRESENT SEARCH HAS NO PREVIOUS CONTEXT !
+    # RESETTING HERE SO THAT PRESENT SEARCH HAS NO PREVIOUS CONTEXT !
+    weaviate_client.reset_collection()
 
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(response.text, "html.parser")
 
-    paragraph_tags = soup.find_all(["p", "div", "section", "article"])
+    paragraph_tags = soup.find_all(
+        ["p", "section", "article", "li"])
 
     all_chunks = []
     all_vectors = []
@@ -69,7 +70,18 @@ def search_chunks(input: SearchInput):
     query_vector = embed_query(input.query)
     results = weaviate_client.search_by_vector(query_vector, limit=10)
 
+    seen_chunks = set()
+    unique_results = []
+
+    for result in results:
+        chunk = result.get("chunk")
+        if chunk and chunk not in seen_chunks:
+            seen_chunks.add(chunk)
+            unique_results.append(result)
+
+    unique_results = unique_results[:10]
+
     return {
         "query": input.query,
-        "matches": results  
+        "matches": unique_results
     }
