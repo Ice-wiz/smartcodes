@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,15 +32,10 @@ def search_chunks(input: SearchInput):
     except requests.RequestException as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    weaviate_client.reset_collection()
+    weaviate_client.reset_collection() # RESETTING HERE SO THAT PRESENT SEARCH HAS NO PREVIOUS CONTEXT !
 
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(response.text, "html.parser")
-
-    for tag in soup(["script", "style", "noscript", "header", "footer", "nav", "svg", "form", "input", "button", "aside"]):
-        tag.decompose()
-    for tag in soup.select('[style*="display:none"], [style*="visibility:hidden"], [hidden]'):
-        tag.decompose()
 
     paragraph_tags = soup.find_all(["p", "div", "section", "article"])
 
@@ -53,7 +48,7 @@ def search_chunks(input: SearchInput):
         clean_text = clean_html(raw_html)
 
         if not clean_text or len(clean_text.split()) < 5:
-            continue 
+            continue
 
         sub_chunks = chunk_by_sentence(clean_text)
 
