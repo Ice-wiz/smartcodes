@@ -12,7 +12,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = SentenceTransformer(MODEL_NAME)
 
 
-def chunk_by_sentence(text: str, max_tokens: int = 150) -> List[str]:
+def chunk_by_sentence(text: str, max_tokens: int = 500) -> List[str]:
     sentences = sent_tokenize(text)
     chunks = []
     current_chunk = ""

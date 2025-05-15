@@ -16,5 +16,6 @@ def clean_html(raw_html: str) -> str:
     text = soup.get_text(separator="\n")
 
     # Drop short/low-content lines and extra whitespace
-    cleaned_lines = [line.strip() for line in text.splitlines() if len(line.strip()) > 40]
+    cleaned_lines = [line.strip()
+                     for line in text.splitlines() if len(line.strip()) > 30]
     return " ".join(cleaned_lines)

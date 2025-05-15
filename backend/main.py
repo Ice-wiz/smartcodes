@@ -38,7 +38,7 @@ def search_chunks(input: SearchInput):
     soup = BeautifulSoup(response.text, "html.parser")
 
     paragraph_tags = soup.find_all(
-        ["p", "section", "article", "li"])
+        ["p", "section", "article", "li", "h1", "h2", "h3", "h4", "h5", "h6","tr"])
 
     all_chunks = []
     all_vectors = []
