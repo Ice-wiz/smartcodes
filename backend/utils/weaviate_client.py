@@ -57,7 +57,7 @@ class WeaviateClient:
             {
                 "chunk": obj.properties["chunk"],
                 "html": obj.properties["html"],
-                "score": obj.metadata.distance,
+                "score": 1-obj.metadata.distance,
             }
             for obj in results.objects
         ]

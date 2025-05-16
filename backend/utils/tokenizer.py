@@ -1,9 +1,9 @@
+from typing import List
 
 from transformers import AutoTokenizer
 from sentence_transformers import SentenceTransformer
 
 from nltk.tokenize import sent_tokenize
-from typing import List
 
 # Load model and tokenizer
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
